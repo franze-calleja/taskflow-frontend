@@ -1,5 +1,4 @@
-import ProjectPage from "@/components/pages/ProjectPage";
-import React from "react";
+import ProjectPageClient from "@/components/pages/ProjectPage"; // Assuming this is the path
 
 // This page component automatically receives `params` from Next.js
 type Props = {
@@ -8,12 +7,7 @@ type Props = {
   };
 };
 
-const page = ({ params }: Props) => {
-  return (
-    <div>
-      <ProjectPage params={params} />
-    </div>
-  );
-};
-
-export default page;
+export default function ProjectPage({ params }: Props) {
+  // Simply render your custom component and pass the params down to it
+  return <ProjectPageClient params={params} />;
+}
