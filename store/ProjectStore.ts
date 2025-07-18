@@ -16,6 +16,8 @@ interface ProjectState{
   error: string | null;
   fetchProjects: (userId: string) => Promise<void>;
   addProject: (name:string, userId: string) => Promise<void>;
+  updateProject: (projectId: string, newName: string) => Promise<void>;
+  deleteProject: (projectId: string) => Promise<void>;
 
 }
 
@@ -58,6 +60,30 @@ export const useProjectStore = create<ProjectState>((set)=>({
     }catch(error){
       console.error('Failed to add project:', error);
       set({error: 'Failed to create project.', loading: false});
+    }
+  },
+  updateProject: async (projectId, newName) => {
+    try {
+      const response = await axios.patch(`${API_URL}/projects/${projectId}`, {name: newName});
+      const updatedProject = response.data;
+      set((state) => ({
+        projects: state.projects.map((p) => p.id === projectId ? updatedProject : p),
+      }))
+    } catch (error) {
+      console.error('Failed to update project:', error);
+      // You can set an error state here to show in the UI
+    }
+  },
+  deleteProject: async (projectId) => {
+    try {
+      await axios.delete(`${API_URL}/projects/${projectId}`);
+      set((state) => ({
+        projects: state.projects.filter((p) => p.id !== projectId),
+      }))
+    } catch (error) {
+      console.error('Failed to delete project:', error);
+      // You can set an error state here to show in the UI
+      
     }
   }
 }))
