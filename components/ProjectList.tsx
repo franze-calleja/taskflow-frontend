@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useProjectStore } from "@/store/ProjectStore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 export function ProjectList() {
   const { data: session } = useSession();
@@ -29,16 +30,19 @@ export function ProjectList() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
-            <Card key={project.id}>
-              <CardHeader>
-                <CardTitle>{project.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-500">
-                  Created on: {new Date(project.createdAt).toLocaleDateString()}
-                </p>
-              </CardContent>
-            </Card>
+            <Link href={`/project/${project.id}`} key={project.id}>
+              <Card className="hover:shadow-lg hover:border-blue-500 transition-all duration-200 cursor-pointer">
+                <CardHeader>
+                  <CardTitle>{project.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500">
+                    Created on:{" "}
+                    {new Date(project.createdAt).toLocaleDateString()}
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       )}
