@@ -1,7 +1,9 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-import { SignOutButton } from "@/components/SIgnOutButton";
+import { SignOutButton } from "../SignoutButton";
+import { AddProjectModal } from "../dialogs/AddProjectModat";
+import { ProjectList } from "../ProjectList";
 
 export default async function DashboardPage() {
   // 1. Protect the route on the server side
@@ -14,21 +16,25 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-950">
-      <div className="p-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-          Welcome to TaskFlow!
-        </h1>
-        <p className="mt-2 text-lg text-gray-600 dark:text-gray-300">
-          Signed in as {session.user?.name || session.user?.email}
-        </p>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          User ID: {session.user?.id}
-        </p>
-        <div className="mt-6">
+    <div className="flex flex-col items-center min-h-screen p-4 md:p-8 bg-gray-50 dark:bg-gray-950">
+      <header className="w-full max-w-6xl flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            My Projects
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400">
+            Welcome back, {session.user?.name}!
+          </p>
+        </div>
+        <div className="flex items-center gap-4">
+          <AddProjectModal />
           <SignOutButton />
         </div>
-      </div>
+      </header>
+
+      <main className="w-full max-w-6xl">
+        <ProjectList />
+      </main>
     </div>
   );
 }

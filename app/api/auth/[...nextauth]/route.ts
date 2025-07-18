@@ -56,25 +56,30 @@ export const authOptions: AuthOptions ={
   ],
   // ADD CALLBACKS SECTION
 
-  callbacks:{
-    async jwt({token, user}){
-      // When the user signs in, the `user` object from `authorize` is passed here.
-      // We are adding the user's id to the token.
-      if(user){
+  callbacks: {
+    /**
+     * This callback is called whenever a JSON Web Token is created.
+     * We add the user's ID from our database to the token here.
+     */
+    async jwt({ token, user }) {
+      if (user) {
         token.id = user.id;
       }
       return token;
     },
 
-    async session({session, token}){
-      // The session callback is called whenever a session is checked.
-      // We are adding the user's id (from the token) to the session object.
-      if (session.user){
+    /**
+     * This callback is called whenever a session is checked.
+     * We take the user ID from the token and add it to the session object.
+     * This makes it available to our frontend components.
+     */
+    async session({ session, token }) {
+      if (session.user) {
         session.user.id = token.id as string;
       }
       return session;
-    }
-  }
+    },
+  },
 }
 
 const handler = NextAuth(authOptions);
