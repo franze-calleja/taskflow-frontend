@@ -11,6 +11,7 @@ type AddBoardProps = {
 };
 
 export function AddBoard({ projectId }: AddBoardProps) {
+  // console.log("3. AddBoard received projectId:", projectId);
   const [name, setName] = useState("");
   const addBoard = useBoardStore((state) => state.addBoard);
 

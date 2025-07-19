@@ -1,6 +1,7 @@
 import {create} from 'zustand';
 import axios from 'axios';
 
+
 // Define the shape of a single task
 export interface Task{
   id: string;
@@ -15,6 +16,8 @@ interface TaskState {
   tasksByBoard: { [boardId: string]: Task[] };
   fetchTasks: (boardId: string) => Promise<void>;
   addTask: (title: string, boardId: string) => Promise<void>;
+  updateTask: (taskId: string, boardId: string, data: { title?: string; description?: string }) => Promise<void>;
+  deleteTask: (taskId: string, boardId: string) => Promise<void>;
 }
 
 const API_URL = 'http://localhost:3001/api';
@@ -55,6 +58,45 @@ export const useTaskStore = create<TaskState>((set) => ({
     } catch (error) {
       console.error(`Failed to add task to board ${boardId}:`, error);
     }
-  }
+  },
+
+  updateTask: async (taskId, boardId, data) => {
+    try {
+      const response = await axios.patch(`${API_URL}/tasks/${taskId}`, data);
+      const updatedTask = response.data;
+      set((state) => {
+        const tasksForBoard = state.tasksByBoard[boardId].map((task) =>
+          task.id === taskId ? updatedTask : task
+        );
+        return {
+          tasksByBoard: {
+            ...state.tasksByBoard,
+            [boardId]: tasksForBoard,
+          },
+        };
+      });
+    } catch (error) {
+      console.error(`Failed to update task ${taskId}:`, error);
+    }
+  },
+
+  deleteTask: async (taskId, boardId) => {
+    try {
+      await axios.delete(`${API_URL}/tasks/${taskId}`);
+      set((state) => {
+        const tasksForBoard = state.tasksByBoard[boardId].filter(
+          (task) => task.id !== taskId
+        );
+        return {
+          tasksByBoard: {
+            ...state.tasksByBoard,
+            [boardId]: tasksForBoard,
+          },
+        };
+      });
+    } catch (error) {
+      console.error(`Failed to delete task ${taskId}:`, error);
+    }
+  },
 
 }))
