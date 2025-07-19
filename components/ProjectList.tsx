@@ -6,6 +6,7 @@ import { useProjectStore } from "@/store/ProjectStore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { ProjectActions } from "./ProjectActions";
+import { Spinner } from "./Spinner";
 
 export function ProjectList() {
   const { data: session } = useSession();
@@ -18,7 +19,7 @@ export function ProjectList() {
     }
   }, [session, fetchProjects]);
   if (loading && projects.length === 0) {
-    return <p>Loading projects...</p>;
+    return <Spinner />;
   }
   if (error) {
     return <p className="text-red-500">{error}</p>;

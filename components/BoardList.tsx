@@ -18,13 +18,14 @@ import { useBoardStore } from "@/store/boardStore";
 import { useTaskStore, Task } from "@/store/taskStore";
 import { BoardColumn } from "./BoardColumn";
 import { TaskCard } from "./TaskCard";
+import { Spinner } from "./Spinner";
 
 type BoardListProps = {
   projectId: string;
 };
 
 export function BoardList({ projectId }: BoardListProps) {
-  const { boards, fetchBoards } = useBoardStore();
+  const { boards, loading: boardsLoading, fetchBoards } = useBoardStore();
   const { tasksByBoard, fetchTasks, moveTask } = useTaskStore();
 
   // State to hold the task that is currently being dragged
@@ -82,6 +83,10 @@ export function BoardList({ projectId }: BoardListProps) {
 
     moveTask(active.id as string, sourceBoardId, destBoardId, newIndex);
   };
+  // 3. Add the loading check
+  if (boardsLoading) {
+    return <Spinner />;
+  }
 
   return (
     <DndContext
