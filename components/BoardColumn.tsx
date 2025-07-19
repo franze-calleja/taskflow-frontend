@@ -23,8 +23,8 @@ export function BoardColumn({ board, tasks }: BoardColumnProps) {
   return (
     <div ref={setNodeRef} className="w-72 flex-shrink-0">
       <Card className="bg-gray-100 dark:bg-gray-800 h-full flex flex-col">
-        <CardHeader className="flex-row items-center justify-between">
-          <CardTitle>{board.name}</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0">
+          <CardTitle className="text-base font-medium">{board.name}</CardTitle>
           <BoardActions boardId={board.id} currentName={board.name} />
         </CardHeader>
         <CardContent className="flex-grow overflow-y-auto">

@@ -63,8 +63,16 @@ export function BoardList({ projectId }: BoardListProps) {
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
-    setActiveTask(null); // Clear the active task
     const { active, over } = event;
+
+    // --- START DEBUG LOG ---
+    console.log("--- EMPTY BOARD DROP TEST ---");
+    console.log("Active (what you dragged):", active);
+    console.log("Over (what you dropped on):", over);
+    console.log("-----------------------------");
+    // --- END DEBUG LOG ---
+
+    setActiveTask(null); // Clear the active task
 
     if (!over || active.id === over.id) {
       return;
@@ -73,7 +81,7 @@ export function BoardList({ projectId }: BoardListProps) {
     const sourceBoardId = active.data.current?.boardId;
     if (!sourceBoardId) return;
 
-    const destBoardId = over.data.current?.boardId || over.id;
+    const destBoardId = over.data.current?.boardId || (over.id as string);
     const tasksInDestBoard = tasksByBoard[destBoardId] || [];
     let newIndex = tasksInDestBoard.findIndex((t) => t.id === over.id);
 
@@ -83,6 +91,7 @@ export function BoardList({ projectId }: BoardListProps) {
 
     moveTask(active.id as string, sourceBoardId, destBoardId, newIndex);
   };
+
   // 3. Add the loading check
   if (boardsLoading) {
     return <Spinner />;
@@ -95,7 +104,7 @@ export function BoardList({ projectId }: BoardListProps) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex gap-4 mt-4 h-full">
+      <div className="flex gap-4 mt-4 h-fit">
         {boards.map((board) => (
           <BoardColumn
             key={board.id}

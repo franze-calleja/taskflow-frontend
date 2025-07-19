@@ -37,14 +37,16 @@ export function ProjectList() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
             <Card key={project.id} className="flex flex-col">
-              <CardHeader className="flex-row items-center justify-between">
-                <CardTitle>{project.name}</CardTitle>
-                {/* 2. Add the actions component */}
+              <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                <CardTitle className="text-base font-medium">
+                  {project.name}
+                </CardTitle>
                 <ProjectActions
                   projectId={project.id}
                   currentName={project.name}
                 />
               </CardHeader>
+
               <CardContent className="flex-grow">
                 <p className="text-sm text-gray-500">
                   Created on: {new Date(project.createdAt).toLocaleDateString()}

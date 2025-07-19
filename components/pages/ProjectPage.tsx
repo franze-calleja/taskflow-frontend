@@ -1,9 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BoardList } from "@/components/BoardList";
 import { AddBoard } from "@/components/AddBoard";
+// 1. Import the new hook
+import { useSocket } from "@/hooks/useSocket";
 
-// The props for this page will include the dynamic params from the URL
 type ProjectPageClientProps = {
   projectId: string;
 };
@@ -11,23 +14,23 @@ type ProjectPageClientProps = {
 export default function ProjectPageClient({
   projectId,
 }: ProjectPageClientProps) {
-  // console.log("1. ProjectPageClient received projectId:", projectId);
+  // 2. Call the hook to establish the real-time connection for this project
+  useSocket(projectId);
+
   return (
-    <div className="p-8">
-      <header className="flex justify-between items-center mb-8">
+    <div className="p-4 md:p-8 h-screen flex flex-col">
+      <header className="flex justify-between items-center mb-4 flex-shrink-0">
         <div>
-          {/* We can fetch and display the project name here later */}
-          <h1 className="text-3xl font-bold">Project Board</h1>
-          <p className="text-gray-500">Project ID: {projectId}</p>
+          <h1 className="text-2xl font-bold">Project Board</h1>
         </div>
-        <div>
+        <div className="flex items-center gap-4">
           <AddBoard projectId={projectId} />
           <Button asChild variant="outline">
             <Link href="/dashboard">← Back to Dashboard</Link>
           </Button>
         </div>
       </header>
-      <main>
+      <main className="flex-grow overflow-x-auto">
         <BoardList projectId={projectId} />
       </main>
     </div>
