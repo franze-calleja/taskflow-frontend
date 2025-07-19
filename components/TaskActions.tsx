@@ -58,11 +58,20 @@ export function TaskActions({ task }: TaskActionsProps) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-6 w-6 p-0">
+          {/* --- THIS IS THE FIX --- */}
+          <Button
+            variant="ghost"
+            className="h-6 w-6 p-0"
+            onPointerDown={(e) => {
+              // This stops the 'pointerdown' event from ever reaching dnd-kit
+              e.stopPropagation();
+            }}
+          >
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          {/* The onClick handlers no longer need stopPropagation, but it doesn't hurt */}
           <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
             <Pencil className="mr-2 h-4 w-4" />
             <span>Edit</span>
@@ -79,6 +88,7 @@ export function TaskActions({ task }: TaskActionsProps) {
 
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        {/* ... (rest of the component is the same) ... */}
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit Task</DialogTitle>
@@ -118,6 +128,7 @@ export function TaskActions({ task }: TaskActionsProps) {
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
       >
+        {/* ... (rest of the component is the same) ... */}
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
